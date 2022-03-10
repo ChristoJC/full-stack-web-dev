@@ -9,14 +9,18 @@ const config = {
 
 	kit: {
 		adapter: adapter(),
-
+		
 		
 		vite:{
 			server:{
-				hmr: {
-					clientPort: process.env.HMR_Host ? 445: 3000,
-					host: process.env.HMR_Host ? process.env.HMR_HOST.substring("https://".length) :"localhost"
-				}
+				hmr: process.env.GITPOD_WORKSPACE_URL
+         		 ? {
+              // removes the protocol and replaces it with the port we're connecting to
+              host: process.env.GITPOD_WORKSPACE_URL.replace('https://', '3000-'),
+              protocol: 'wss',
+              clientPort: 443
+           		 }
+         		 : true
 			}
 		}
 	}
