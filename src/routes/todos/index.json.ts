@@ -1,38 +1,40 @@
 
 
-import type { RequestHandler }  from "@sveltejs/kit"
+import type { RequestHandler } from "@sveltejs/kit";
+import { api } from "./_api";
 
-//Todo: persis data base
-let todos: Todo[] = []; 
 
 //get
-export const get: RequestHandler = async () => {
-    return{
-        status:200,
-        body: todos
-    }
-}
+export const get: RequestHandler = (request) => {
+    return api(request);
+  }
 
-
-//post
+//post 
 export const post: RequestHandler = async ({request}) => {
-
     const formData = await request.formData();
-    todos.push({
-        created_at: new Date(),
-        text: formData.get("text") as string,
-        done: false
-    })
- 
+    return api(request,
+        {
+       
+            uid: `${Date.now()}`, // TODO: Replace with the UID from the database
+            created_at: new Date(),
+            text: formData.get("text") as string,
+            done: false
+        
+    }
+    )}
 
-   
-   return{
-      status:303,
-      headers:{
-          location: "/"
-      }
-   }
     
-}
+//     import type { RequestHandler } from "@sveltejs/kit";
+// import { api } from "./_api";
 
-// body: formData.get("text") as string
+
+
+// export const post: RequestHandler<{}, FormData> = async (request) => {
+//     const formData = await request.formData();
+//   return api(request, {
+//       uid: `${Date.now}`,
+//     created_at: new Date(),
+//     text: formData.get("text") as string,
+//     done: false
+//   });
+// }
